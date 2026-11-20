@@ -1,59 +1,64 @@
 # OPNsense Proxy Aliases
 
-Automated, validated IP/CIDR feeds for OPNsense **URL Table (IPs)**. YouTube is the first integrated service; the architecture is intended to grow to additional services.
+Автоматическая сборка IP/CIDR- и доменных списков для OPNsense. В репозитории собраны как новые сервисы, так и известные существующие направления из текущей конфигурации.
 
-## Published files
+## Публикуемые IP feeds
 
-Generated files are committed to the repository after every successful build:
+Все URL ниже содержат **только IP-адреса/CIDR**, без доменных имён:
 
-- **All services, IPv4 + IPv6:** `https://raw.githubusercontent.com/Serg434/Alias/main/dist/all_ips.txt`
-- YouTube IPv4: `https://raw.githubusercontent.com/Serg434/Alias/main/dist/youtube_ipv4.txt`
-- YouTube IPv6: `https://raw.githubusercontent.com/Serg434/Alias/main/dist/youtube_ipv6.txt`
-- YouTube domains (not an IP alias): `https://raw.githubusercontent.com/Serg434/Alias/main/dist/youtube_domains.txt`
-- Build manifest: `https://raw.githubusercontent.com/Serg434/Alias/main/dist/manifest.json`
+- Общий IPv4 + IPv6: https://raw.githubusercontent.com/Serg434/Alias/main/dist/all_ips.txt
+- Общий IPv4: https://raw.githubusercontent.com/Serg434/Alias/main/dist/all_ipv4.txt
+- Общий IPv6: https://raw.githubusercontent.com/Serg434/Alias/main/dist/all_ipv6.txt
+- Манифест: https://raw.githubusercontent.com/Serg434/Alias/main/dist/manifest.json
 
-`all_ips.txt` is the single combined feed: it contains all validated IP addresses and CIDR networks from every IP service feed integrated into this project, across both address families. It is deduplicated and sorted. As new services are added, their validated IP entries will be included automatically.
+Для каждого сервиса публикуются три файла: `dist/<service>.txt` (IPv4 + IPv6), `dist/<service>_ipv4.txt`, `dist/<service>_ipv6.txt`. Категориальные объединения имеют вид `dist/<category>_all.txt`.
 
-The combined feed is for a single OPNsense **URL Table (IPs)** alias. Before using it in production, verify that the installed OPNsense version accepts mixed IPv4/IPv6 entries in one URL Table and that the resulting table is populated as expected. Separate family feeds remain available for split routing and troubleshooting.
+## Публикуемые домены
 
-## Initial YouTube sources
+Домены не смешиваются с IP feeds. Для них отдельный каталог:
 
-- `touhidurrr/iplist-youtube`: IPv4 hosts, IPv4 CIDRs, IPv6 hosts and IPv6 CIDRs.
-- `itdoginfo/allow-domains`: YouTube domain list.
+- Все домены: https://raw.githubusercontent.com/Serg434/Alias/main/dist/domains/all_domains.txt
+- Сервис: https://raw.githubusercontent.com/Serg434/Alias/main/dist/domains/<service>.txt
 
-These are community-maintained sources. False positives and shared CDN/provider ranges are possible; an IP list cannot guarantee service-level isolation where infrastructure is shared.
+Доменные списки предназначены для Host(s)/других доменных механизмов OPNsense, а не для URL Table (IPs).
 
-## Validation and safety
+## Включённые сервисы
 
-- IPv4 and IPv6 are emitted separately and also combined into `all_ips.txt`.
-- Entries are parsed with Python's standard `ipaddress` module; malformed, wrong-family, non-global and duplicate entries are rejected.
-- Host addresses and full-length host CIDRs are normalized to avoid duplicate representations.
-- The build fails if a source cannot be downloaded, a feed is empty, or output counts fall below safety thresholds.
-- Output files are written only after every source and threshold passes.
-- Generated feeds are intentionally versioned in Git so OPNsense can fetch stable raw URLs.
+AI: OpenAI/ChatGPT, Claude, Gemini, Grok, Perplexity, Copilot.  
+Дизайн: Canva, Figma.  
+Продуктивность: Notion.  
+Социальные сети: Meta (Facebook, Instagram, WhatsApp, Threads), TikTok, Pinterest, LinkedIn.  
+Мессенджеры: Telegram.  
+Медиа: YouTube, Netflix, Wattpad.  
+Существующие утилиты/инфраструктура: Arduino, 2ip.io и погодные API (Open-Meteo, wttr.in, MET Norway), Torrents.
 
-## Automatic updates
+## Источники и ограничения
 
-GitHub Actions runs daily and can be started manually from **Actions → Update aliases → Run workflow**.
+- YouTube: community IP feeds `touhidurrr/iplist-youtube` (IPv4/IPv6 hosts и CIDR) и домены `itdoginfo/allow-domains`.
+- Meta: IPv4/IPv6 префиксы `lord-alfred/ipranges`. Это общие сети Meta, а не раздельные диапазоны Facebook/Instagram/WhatsApp/Threads.
+- Telegram: CIDR feed Telegram Core.
+- Claude: статические префиксы, опубликованные в community-maintained ipranges, плюс DNS A/AAAA для перечисленных доменов.
+- Остальные сервисы: DNS A/AAAA для явного перечня доменов из `config/services.json`.
 
-## OPNsense rollout
+DNS-ответы получены с резолвера GitHub Actions runner. Они зависят от времени, географии, CDN и DNS-резолвера; это не гарантированные постоянные диапазоны сервиса. Для Google и Microsoft не импортируются широкие диапазоны провайдеров: Gemini/Copilot IP-адреса могут пересекаться с обычными Google/Microsoft API. Облачные и CDN-диапазоны целиком не добавляются.
 
-For the future unified routing rule, create a new alias (do not overwrite the existing working aliases yet):
+У Meta один общий IP-набор намеренно: разделить эти приложения по IP надёжно нельзя. Домены по каждому сервису перечислены в общем Meta domain feed; отдельные IP-фиды Facebook/Instagram/WhatsApp/Threads будут представлены общим набором Meta, если понадобится отдельное имя алиаса.
 
-| Alias name | Type | URL |
-|---|---|---|
-| `PROXY_DOMAINS_ALL_new` | URL Table (IPs) | `https://raw.githubusercontent.com/Serg434/Alias/main/dist/all_ips.txt` |
+## Валидация
 
-Keep the current aliases as rollback/reserve until the new alias is populated and routing has been tested. Note that the current combined file only contains services actually integrated into the builder; at this stage that is YouTube IP data, not every service currently configured manually in your OPNsense.
+- IP-адреса и сети разбираются стандартным Python `ipaddress`; приватные, зарезервированные и некорректные значения отбрасываются.
+- YouTube остаётся обязательным safety baseline: сборка останавливается, если его IPv4 или IPv6 меньше 100 записей.
+- Недоступный обязательный upstream feed останавливает сборку до публикации.
+- Ошибки отдельных DNS-имён не останавливают весь выпуск; они перечисляются в `manifest.json`.
+- Генератор не импортирует широкие диапазоны Google, Microsoft, AWS или Cloudflare.
+- IP- и domain-фиды разнесены по разным каталогам.
 
-## Domains are not IPs
+Важно: генератор заменяет содержимое публикуемых файлов только после успешного сбора всех обязательных источников и проверки базовых порогов. Для полного совпадения с вашими вручную созданными Host(s) алиасами Arduino/Torrents/Wattpad и прочими сервисами их фактические записи всё равно понадобятся при последующей сверке — сейчас в сбор включён проверяемый базовый доменный набор по названию сервиса.
 
-The domain list is published separately. It is not converted into IPs by resolving only apex domains, because that would miss dynamic subdomains and CDN endpoints.
+## Обновления
 
-## Local build
+GitHub Actions запускает сборку ежедневно в 03:17 UTC, при push в main и вручную через Actions → Update aliases → Run workflow.
 
-No third-party Python packages are required:
+## Безопасное подключение в OPNsense
 
-```bash
-python scripts/build_aliases.py
-```
+Сначала создайте новые тестовые URL Table (IPs) aliases и проверьте количество записей и маршрутизацию. Не заменяйте текущие рабочие алиасы до проверки. Общий IP-feed — агрегат всех включённых сервисов и может включать общие CDN/DNS адреса; для точечной маршрутизации используйте сервисный IP-feed или доменный alias там, где это поддерживается.
