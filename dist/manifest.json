@@ -1,8 +1,8 @@
 {
   "counts": {
-    "all_ip_entries": 37862,
+    "all_ip_entries": 37859,
     "domains": 163,
-    "ipv4_entries": 19072,
+    "ipv4_entries": 19069,
     "ipv6_entries": 18790,
     "services": 24
   },
@@ -11,7 +11,7 @@
     "unresolved_domain_count": 36,
     "warning": "DNS-derived IPs can be GeoDNS/CDN answers and may change. They are not authoritative service-owned prefixes."
   },
-  "generated_at": "2026-11-20T13:33:04+00:00",
+  "generated_at": "2026-11-20T14:32:26+00:00",
   "generator": "scripts/build_aliases.py",
   "global_warnings": [
     "DNS-resolved addresses may be shared by unrelated services and can vary by resolver, geography and time.",
@@ -100,9 +100,9 @@
       "category": "social",
       "counts": {
         "domains": 10,
-        "ip_entries": 1369,
+        "ip_entries": 1367,
         "ipv4": 586,
-        "ipv6": 783
+        "ipv6": 781
       },
       "dns_unresolved_domains": [
         "facebook.net",
@@ -177,9 +177,9 @@
       "category": "social",
       "counts": {
         "domains": 4,
-        "ip_entries": 1365,
+        "ip_entries": 1366,
         "ipv4": 585,
-        "ipv6": 780
+        "ipv6": 781
       },
       "dns_unresolved_domains": [
         "cdninstagram.com"
@@ -225,8 +225,8 @@
       "category": "social",
       "counts": {
         "domains": 22,
-        "ip_entries": 1383,
-        "ipv4": 594,
+        "ip_entries": 1382,
+        "ipv4": 593,
         "ipv6": 789
       },
       "dns_unresolved_domains": [
@@ -395,8 +395,8 @@
       "category": "social",
       "counts": {
         "domains": 13,
-        "ip_entries": 14,
-        "ipv4": 14,
+        "ip_entries": 12,
+        "ipv4": 12,
         "ipv6": 0
       },
       "dns_unresolved_domains": [
@@ -455,9 +455,9 @@
       "category": "social",
       "counts": {
         "domains": 4,
-        "ip_entries": 1365,
-        "ipv4": 585,
-        "ipv6": 780
+        "ip_entries": 1363,
+        "ipv4": 584,
+        "ipv6": 779
       },
       "dns_unresolved_domains": [
         "whatsapp.biz"
