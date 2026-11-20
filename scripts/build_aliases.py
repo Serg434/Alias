@@ -1,219 +1,305 @@
 #!/usr/bin/env python3
-"""Build validated OPNsense feeds and a combined all-services IP list."""
+"""Build validated per-service OPNsense IP feeds and separate domain feeds.
 
+Only IP/CIDR values are written to dist/*.txt IP feeds. Domain names are
+published under dist/domains/. DNS-derived addresses are explicitly marked
+as volatile in the manifest because CDN/GeoDNS answers vary by resolver.
+"""
 from __future__ import annotations
 
 import ipaddress
 import json
-import re
+import socket
 import sys
 import time
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
-USER_AGENT = "Serg434-OPNsense-Alias-Builder/1.0"
+CONFIG = ROOT / "config" / "services.json"
+USER_AGENT = "Serg434-OPNsense-Alias-Builder/2.0"
 MAX_DOWNLOAD_BYTES = 20 * 1024 * 1024
-MIN_IPV4_ENTRIES = 100
-MIN_IPV6_ENTRIES = 100
-
-SOURCES = {
-    "ipv4_hosts": (
-        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt",
-        4,
-        "address",
-    ),
-    "ipv4_networks": (
-        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt",
-        4,
-        "network",
-    ),
-    "ipv6_hosts": (
-        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt",
-        6,
-        "address",
-    ),
-    "ipv6_networks": (
-        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr6.txt",
-        6,
-        "network",
-    ),
-}
-
-DOMAIN_SOURCE = (
-    "https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Services/youtube.lst"
-)
-DOMAIN_RE = re.compile(
-    r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$",
-    re.IGNORECASE,
-)
+MAX_WORKERS = 16
 
 
 class BuildError(RuntimeError):
     pass
 
 
-def download(url: str) -> str:
+def download(url: str, required: bool = True) -> str | None:
     request = urllib.request.Request(
-        url,
-        headers={"User-Agent": USER_AGENT, "Accept": "text/plain"},
+        url, headers={"User-Agent": USER_AGENT, "Accept": "text/plain"}
     )
     last_error: Exception | None = None
     for attempt in range(3):
         try:
             with urllib.request.urlopen(request, timeout=30) as response:
+                if response.status != 200:
+                    raise BuildError(f"HTTP {response.status}: {url}")
                 data = response.read(MAX_DOWNLOAD_BYTES + 1)
                 if len(data) > MAX_DOWNLOAD_BYTES:
-                    raise BuildError(f"Download exceeds size limit: {url}")
-                if response.status != 200:
-                    raise BuildError(f"Unexpected HTTP status {response.status}: {url}")
+                    raise BuildError(f"Download exceeds {MAX_DOWNLOAD_BYTES} bytes: {url}")
                 return data.decode("utf-8-sig")
-        except (urllib.error.URLError, TimeoutError, UnicodeDecodeError) as exc:
+        except (urllib.error.URLError, TimeoutError, UnicodeDecodeError, OSError) as exc:
             last_error = exc
             if attempt < 2:
                 time.sleep(2 ** attempt)
-    raise BuildError(f"Unable to download {url}: {last_error}")
+    if required:
+        raise BuildError(f"Required source unavailable: {url}: {last_error}")
+    print(f"WARNING: optional source unavailable: {url}: {last_error}", file=sys.stderr)
+    return None
 
 
-def parse_feed(name: str, content: str, family: int, kind: str):
-    accepted = set()
+def parse_ip_lines(content: str, family: int | None = None) -> tuple[set[str], int]:
+    accepted: set[str] = set()
     rejected = 0
-    for raw_line in content.splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith(("#", ";", "!")):
+    for raw in content.splitlines():
+        line = raw.strip().split("#", 1)[0].strip()
+        if not line or line.startswith((";", "!")):
             continue
+        # Support CIDR-only feeds and address feeds. Strip simple list syntax.
+        line = line.removeprefix("address=").strip()
         try:
-            if kind == "address":
-                item = ipaddress.ip_address(line)
-                if item.version != family or not item.is_global:
+            if "/" in line:
+                obj = ipaddress.ip_network(line, strict=False)
+                if family and obj.version != family:
                     rejected += 1
                     continue
-                normalized = item.compressed
+                if not obj.network_address.is_global or not obj.broadcast_address.is_global:
+                    rejected += 1
+                    continue
+                value = obj.network_address.compressed if obj.prefixlen == obj.max_prefixlen else obj.with_prefixlen
             else:
-                item = ipaddress.ip_network(line, strict=False)
-                if item.version != family or not item.is_global:
+                obj = ipaddress.ip_address(line)
+                if family and obj.version != family:
                     rejected += 1
                     continue
-                normalized = (
-                    item.network_address.compressed
-                    if item.prefixlen == item.max_prefixlen
-                    else item.with_prefixlen
-                )
-            accepted.add(normalized)
+                if not obj.is_global:
+                    rejected += 1
+                    continue
+                value = obj.compressed
+            accepted.add(value)
         except ValueError:
             rejected += 1
-    if not accepted:
-        raise BuildError(f"Feed {name} produced no globally routable IPv{family} entries")
     return accepted, rejected
 
 
-def parse_domains(content: str) -> list[str]:
-    domains = set()
-    rejected = 0
-    for raw_line in content.splitlines():
-        line = raw_line.strip().lower().rstrip(".")
-        if not line or line.startswith(("#", ";", "!")):
+def parse_domains(lines: list[str]) -> list[str]:
+    out = set()
+    for raw in lines:
+        domain = raw.strip().lower().rstrip(".")
+        if not domain or domain.startswith(("#", ";", "!")):
             continue
-        if line.startswith("||"):
-            line = line[2:].split("^", 1)[0]
-        if line.startswith("*."):
-            line = line[2:]
-        if DOMAIN_RE.fullmatch(line):
-            domains.add(line)
-        else:
-            rejected += 1
-    if len(domains) < 5:
-        raise BuildError(
-            f"Domain source unexpectedly small: {len(domains)} accepted, {rejected} rejected"
-        )
-    return sorted(domains)
+        if domain.startswith("||"):
+            domain = domain[2:].split("^", 1)[0]
+        if domain.startswith("*."):
+            domain = domain[2:]
+        try:
+            domain.encode("ascii")
+            labels = domain.split(".")
+            if len(labels) < 2 or len(domain) > 253:
+                continue
+            if all(1 <= len(x) <= 63 and x[0].isalnum() and x[-1].isalnum()
+                   and all(c.isalnum() or c == "-" for c in x) for x in labels):
+                out.add(domain)
+        except UnicodeEncodeError:
+            continue
+    return sorted(out)
 
 
-def write_atomic(path: Path, content: str) -> None:
+def resolve_domain(domain: str, timeout: float) -> tuple[str, set[str], str | None]:
+    old_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(timeout)
+    try:
+        answers = set()
+        for item in socket.getaddrinfo(domain, None, type=socket.SOCK_STREAM):
+            address = item[4][0].split("%", 1)[0]
+            try:
+                ip = ipaddress.ip_address(address)
+                if ip.is_global:
+                    answers.add(ip.compressed)
+            except ValueError:
+                pass
+        return domain, answers, None if answers else "no global A/AAAA answers"
+    except (socket.gaierror, OSError) as exc:
+        return domain, set(), str(exc)
+    finally:
+        socket.setdefaulttimeout(old_timeout)
+
+
+def sort_ips(values: set[str]) -> list[str]:
+    def key(value: str):
+        if "/" in value:
+            net = ipaddress.ip_network(value, strict=False)
+            return net.version, int(net.network_address), net.prefixlen
+        ip = ipaddress.ip_address(value)
+        return ip.version, int(ip), ip.max_prefixlen
+    return sorted(values, key=key)
+
+
+def atomic_write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(content, encoding="utf-8", newline="\n")
-    temporary.replace(path)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(content, encoding="utf-8", newline="\n")
+    tmp.replace(path)
 
 
 def main() -> int:
     try:
-        parsed = {}
-        rejected_by_source = {}
-        source_counts = {}
+        config = json.loads(CONFIG.read_text(encoding="utf-8"))
+        services = config["services"]
+        if not services:
+            raise BuildError("No services configured")
+        timeout = float(config.get("dns_resolution", {}).get("timeout_seconds", 5))
+        generated = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+        service_results = {}
+        all_v4: set[str] = set()
+        all_v6: set[str] = set()
+        all_domains: set[str] = set()
+        total_dns_errors = 0
 
-        for name, (url, family, kind) in SOURCES.items():
-            content = download(url)
-            entries, rejected = parse_feed(name, content, family, kind)
-            parsed[name] = entries
-            rejected_by_source[name] = rejected
-            source_counts[name] = len(entries)
+        # Fetch all configured source feeds before publishing anything.
+        for service in services:
+            sid = service["id"]
+            domains = list(service.get("domains", []))
+            source_meta = []
+            ip_values: set[str] = set()
+            rejected_by_source = {}
+            for source in service.get("ip_sources", []):
+                body = download(source["url"], required=source.get("required", True))
+                if body is None:
+                    continue
+                entries, rejected = parse_ip_lines(body, source.get("family"))
+                if not entries and source.get("required", True):
+                    raise BuildError(f"{sid}: required IP source returned no usable entries: {source['url']}")
+                ip_values.update(entries)
+                rejected_by_source[source["url"]] = rejected
+                source_meta.append({"url": source["url"], "accepted": len(entries), "rejected": rejected})
+            for raw in service.get("static_ips", []):
+                entries, rejected = parse_ip_lines(raw)
+                if not entries or rejected:
+                    raise BuildError(f"{sid}: invalid static IP/CIDR entry: {raw}")
+                ip_values.update(entries)
 
-        ipv4_set = parsed["ipv4_hosts"] | parsed["ipv4_networks"]
-        ipv6_set = parsed["ipv6_hosts"] | parsed["ipv6_networks"]
+            domain_source = service.get("domain_source")
+            if domain_source:
+                body = download(domain_source, required=True)
+                domains.extend(parse_domains(body.splitlines()))
+                source_meta.append({"url": domain_source, "type": "domains"})
 
-        def ip_sort_key(value: str):
-            network = ipaddress.ip_network(value, strict=False)
-            return (network.version, int(network.network_address), network.prefixlen)
+            domains = parse_domains(domains)
+            if not domains and not ip_values:
+                raise BuildError(f"{sid}: no domains or IP ranges configured")
+            service_results[sid] = {
+                "category": service.get("category", "other"),
+                "domains": domains,
+                "ips": ip_values,
+                "sources": source_meta,
+                "rejected_by_source": rejected_by_source,
+                "notes": service.get("notes", []),
+                "dns_errors": [],
+            }
+            all_domains.update(domains)
 
-        ipv4 = sorted(ipv4_set, key=ip_sort_key)
-        ipv6 = sorted(ipv6_set, key=ip_sort_key)
-        all_ips = sorted(ipv4_set | ipv6_set, key=ip_sort_key)
+        # Resolve domains in parallel; one failing hostname must not hide other
+        # working endpoints. Per-service errors are exposed in the manifest.
+        lookup = {}
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+            futures = {pool.submit(resolve_domain, d, timeout): d
+                       for result in service_results.values() for d in result["domains"]}
+            for future in as_completed(futures):
+                domain, answers, error = future.result()
+                lookup[domain] = answers
+                if error:
+                    total_dns_errors += 1
 
-        if len(ipv4) < MIN_IPV4_ENTRIES:
-            raise BuildError(f"IPv4 output below safety threshold: {len(ipv4)}")
-        if len(ipv6) < MIN_IPV6_ENTRIES:
-            raise BuildError(f"IPv6 output below safety threshold: {len(ipv6)}")
+        for sid, result in service_results.items():
+            for domain in result["domains"]:
+                answers = lookup.get(domain, set())
+                result["ips"].update(answers)
+                if not answers:
+                    result["dns_errors"].append(domain)
+            ips = result["ips"]
+            v4 = {x for x in ips if ipaddress.ip_address(x.split("/", 1)[0]).version == 4}
+            v6 = ips - v4
+            result["ipv4"] = sort_ips(v4)
+            result["ipv6"] = sort_ips(v6)
+            result["all"] = sort_ips(ips)
+            all_v4.update(v4)
+            all_v6.update(v6)
 
-        domains = parse_domains(download(DOMAIN_SOURCE))
-        generated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+        # Existing YouTube feed remains the minimum safety baseline. Other
+        # services can legitimately have only one address family or DNS data.
+        youtube = service_results.get("youtube")
+        if not youtube or len(youtube["ipv4"]) < 100 or len(youtube["ipv6"]) < 100:
+            raise BuildError("YouTube baseline safety check failed (need >=100 IPv4 and >=100 IPv6 entries)")
+        if len(all_v4) + len(all_v6) < 100:
+            raise BuildError("Combined output unexpectedly small")
+
+        # Stage every output in memory, then atomically replace individual files.
+        outputs: dict[Path, str] = {}
+        outputs[DIST / "all_ips.txt"] = "\n".join(sort_ips(all_v4 | all_v6)) + "\n"
+        outputs[DIST / "all_ipv4.txt"] = "\n".join(sort_ips(all_v4)) + "\n"
+        outputs[DIST / "all_ipv6.txt"] = "\n".join(sort_ips(all_v6)) + "\n"
+        outputs[DIST / "domains" / "all_domains.txt"] = "\n".join(sorted(all_domains)) + "\n"
+
+        manifest_services = {}
+        for sid, result in service_results.items():
+            for suffix, values in (("", result["all"]), ("_ipv4", result["ipv4"]), ("_ipv6", result["ipv6"])):
+                outputs[DIST / f"{sid}{suffix}.txt"] = "\n".join(values) + ("\n" if values else "")
+            outputs[DIST / "domains" / f"{sid}.txt"] = "\n".join(result["domains"]) + "\n"
+            manifest_services[sid] = {
+                "category": result["category"],
+                "counts": {"ipv4": len(result["ipv4"]), "ipv6": len(result["ipv6"]),
+                           "ip_entries": len(result["all"]), "domains": len(result["domains"])},
+                "sources": result["sources"],
+                "rejected_by_source": result["rejected_by_source"],
+                "dns_unresolved_domains": result["dns_errors"],
+                "notes": result["notes"],
+                "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+            }
+
+        # Thematic aggregate IP feeds; shared network ranges are deduplicated.
+        categories = sorted({r["category"] for r in service_results.values()})
+        for category in categories:
+            ids = [sid for sid, r in service_results.items() if r["category"] == category]
+            values = set().union(*(service_results[sid]["ips"] for sid in ids))
+            outputs[DIST / f"{category}_all.txt"] = "\n".join(sort_ips(values)) + ("\n" if values else "")
 
         manifest = {
-            "schema_version": 1,
-            "service": "youtube",
-            "generated_at": generated_at,
-            "counts": {
-                "ipv4_entries": len(ipv4),
-                "ipv6_entries": len(ipv6),
-                "domains": len(domains),
-                "all_ip_entries": len(all_ips),
-            },
-            "source_counts": source_counts,
-            "rejected_entries": rejected_by_source,
-            "sources": {
-                **{name: value[0] for name, value in SOURCES.items()},
-                "domains": DOMAIN_SOURCE,
-            },
-            "notes": [
-                "Community-maintained upstream IP feeds; false positives are possible.",
-                "Domain list is published separately and is not converted by resolving apex domains.",
-                "Shared CDN/provider IPs may serve unrelated services.",
+            "schema_version": 2,
+            "generated_at": generated,
+            "generator": "scripts/build_aliases.py",
+            "dns_resolution": {"resolver": "GitHub Actions runner system resolver", "unresolved_domain_count": total_dns_errors,
+                               "warning": "DNS-derived IPs can be GeoDNS/CDN answers and may change. They are not authoritative service-owned prefixes."},
+            "counts": {"services": len(service_results), "ipv4_entries": len(all_v4),
+                       "ipv6_entries": len(all_v6), "all_ip_entries": len(all_v4 | all_v6),
+                       "domains": len(all_domains)},
+            "services": manifest_services,
+            "global_warnings": [
+                "DNS-resolved addresses may be shared by unrelated services and can vary by resolver, geography and time.",
+                "Meta IP ranges are shared across Facebook, Instagram, WhatsApp and Threads; service isolation is domain-based.",
+                "No broad Google, Microsoft, AWS, Cloudflare or other cloud-provider ranges are imported.",
+                "Domain feeds are separate from URL Table (IPs) feeds and must not be loaded as IP tables."
             ],
         }
 
-        # Replace published files only after every source and safety check passes.
-        write_atomic(DIST / "all_ips.txt", "\n".join(all_ips) + "\n")
-        write_atomic(DIST / "youtube_ipv4.txt", "\n".join(ipv4) + "\n")
-        write_atomic(DIST / "youtube_ipv6.txt", "\n".join(ipv6) + "\n")
-        write_atomic(DIST / "youtube_domains.txt", "\n".join(domains) + "\n")
-        write_atomic(
-            DIST / "manifest.json",
-            json.dumps(manifest, indent=2, sort_keys=True) + "\n",
-        )
+        outputs[DIST / "manifest.json"] = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+        for path, content in outputs.items():
+            atomic_write(path, content)
 
-        print(
-            f"Build OK: IPv4={len(ipv4)}, IPv6={len(ipv6)}, "
-            f"domains={len(domains)}, all IPs={len(all_ips)}"
-        )
-        print(
-            "Rejected entries by source: "
-            + json.dumps(rejected_by_source, sort_keys=True)
-        )
+        print(f"Build OK: services={len(service_results)}, IPv4={len(all_v4)}, IPv6={len(all_v6)}, "
+              f"IP entries={len(all_v4 | all_v6)}, domains={len(all_domains)}, "
+              f"unresolved domains={total_dns_errors}")
+        for sid, result in service_results.items():
+            print(f"  {sid}: v4={len(result['ipv4'])}, v6={len(result['ipv6'])}, "
+                  f"domains={len(result['domains'])}, unresolved={len(result['dns_errors'])}")
         return 0
-    except BuildError as exc:
+    except (BuildError, KeyError, ValueError, OSError, json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
 
