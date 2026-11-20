@@ -243,12 +243,12 @@ def main() -> int:
         outputs[DIST / "all_ips.txt"] = "\n".join(sort_ips(all_v4 | all_v6)) + "\n"
         outputs[DIST / "all_ipv4.txt"] = "\n".join(sort_ips(all_v4)) + "\n"
         outputs[DIST / "all_ipv6.txt"] = "\n".join(sort_ips(all_v6)) + "\n"
-        outputs[DIST / "domains" / "all_domains.txt"] = "\n".join(sorted(all_domains)) + "\n"
+        outputs[DIST / "all_domains.txt"] = "\n".join(sorted(all_domains)) + "\n"
 
         manifest_services = {}
         for sid, result in service_results.items():
-            for suffix, values in (("", result["all"]), ("_ipv4", result["ipv4"]), ("_ipv6", result["ipv6"])):
-                outputs[DIST / f"{sid}{suffix}.txt"] = "\n".join(values) + ("\n" if values else "")
+            outputs[DIST / "ipv4" / f"{sid}.txt"] = "\n".join(result["ipv4"]) + ("\n" if result["ipv4"] else "")
+            outputs[DIST / "ipv6" / f"{sid}.txt"] = "\n".join(result["ipv6"]) + ("\n" if result["ipv6"] else "")
             outputs[DIST / "domains" / f"{sid}.txt"] = "\n".join(result["domains"]) + "\n"
             manifest_services[sid] = {
                 "category": result["category"],
@@ -287,8 +287,18 @@ def main() -> int:
         }
 
         outputs[DIST / "manifest.json"] = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+
+        # Remove legacy per-service combined IP feeds and the old nested aggregate
+        # domain feed. Category aggregates and global all_ips.txt remain supported.
+        legacy_paths = []
+        for sid in service_results:
+            legacy_paths.extend((DIST / f"{sid}.txt", DIST / f"{sid}_ipv4.txt", DIST / f"{sid}_ipv6.txt"))
+        legacy_paths.append(DIST / "domains" / "all_domains.txt")
+
         for path, content in outputs.items():
             atomic_write(path, content)
+        for path in legacy_paths:
+            path.unlink(missing_ok=True)
 
         print(f"Build OK: services={len(service_results)}, IPv4={len(all_v4)}, IPv6={len(all_v6)}, "
               f"IP entries={len(all_v4 | all_v6)}, domains={len(all_domains)}, "
