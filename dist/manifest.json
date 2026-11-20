@@ -1,17 +1,17 @@
 {
   "counts": {
-    "all_ip_entries": 37851,
+    "all_ip_entries": 37862,
     "domains": 163,
-    "ipv4_entries": 19066,
-    "ipv6_entries": 18785,
-    "services": 20
+    "ipv4_entries": 19072,
+    "ipv6_entries": 18790,
+    "services": 24
   },
   "dns_resolution": {
     "resolver": "GitHub Actions runner system resolver",
-    "unresolved_domain_count": 32,
+    "unresolved_domain_count": 36,
     "warning": "DNS-derived IPs can be GeoDNS/CDN answers and may change. They are not authoritative service-owned prefixes."
   },
-  "generated_at": "2026-11-20T13:32:36+00:00",
+  "generated_at": "2026-11-20T13:33:04+00:00",
   "generator": "scripts/build_aliases.py",
   "global_warnings": [
     "DNS-resolved addresses may be shared by unrelated services and can vary by resolver, geography and time.",
@@ -96,6 +96,39 @@
       "rejected_by_source": {},
       "sources": []
     },
+    "facebook": {
+      "category": "social",
+      "counts": {
+        "domains": 10,
+        "ip_entries": 1369,
+        "ipv4": 586,
+        "ipv6": 783
+      },
+      "dns_unresolved_domains": [
+        "facebook.net",
+        "tfbnw.net"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ],
+      "rejected_by_source": {
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt": 0,
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt": 0
+      },
+      "sources": [
+        {
+          "accepted": 582,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
+        },
+        {
+          "accepted": 778,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
+        }
+      ]
+    },
     "figma": {
       "category": "design",
       "counts": {
@@ -116,9 +149,9 @@
       "category": "ai",
       "counts": {
         "domains": 13,
-        "ip_entries": 71,
-        "ipv4": 36,
-        "ipv6": 35
+        "ip_entries": 95,
+        "ipv4": 51,
+        "ipv6": 44
       },
       "dns_unresolved_domains": [],
       "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
@@ -140,6 +173,38 @@
       "rejected_by_source": {},
       "sources": []
     },
+    "instagram": {
+      "category": "social",
+      "counts": {
+        "domains": 4,
+        "ip_entries": 1365,
+        "ipv4": 585,
+        "ipv6": 780
+      },
+      "dns_unresolved_domains": [
+        "cdninstagram.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ],
+      "rejected_by_source": {
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt": 0,
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt": 0
+      },
+      "sources": [
+        {
+          "accepted": 582,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
+        },
+        {
+          "accepted": 778,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
+        }
+      ]
+    },
     "linkedin": {
       "category": "social",
       "counts": {
@@ -160,9 +225,9 @@
       "category": "social",
       "counts": {
         "domains": 22,
-        "ip_entries": 1375,
-        "ipv4": 589,
-        "ipv6": 786
+        "ip_entries": 1383,
+        "ipv4": 594,
+        "ipv6": 789
       },
       "dns_unresolved_domains": [
         "cdninstagram.com",
@@ -296,6 +361,36 @@
         }
       ]
     },
+    "threads": {
+      "category": "social",
+      "counts": {
+        "domains": 2,
+        "ip_entries": 1363,
+        "ipv4": 583,
+        "ipv6": 780
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ],
+      "rejected_by_source": {
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt": 0,
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt": 0
+      },
+      "sources": [
+        {
+          "accepted": 582,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
+        },
+        {
+          "accepted": 778,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
+        }
+      ]
+    },
     "tiktok": {
       "category": "social",
       "counts": {
@@ -356,13 +451,45 @@
       "rejected_by_source": {},
       "sources": []
     },
+    "whatsapp": {
+      "category": "social",
+      "counts": {
+        "domains": 4,
+        "ip_entries": 1365,
+        "ipv4": 585,
+        "ipv6": 780
+      },
+      "dns_unresolved_domains": [
+        "whatsapp.biz"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ],
+      "rejected_by_source": {
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt": 0,
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt": 0
+      },
+      "sources": [
+        {
+          "accepted": 582,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
+        },
+        {
+          "accepted": 778,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
+        }
+      ]
+    },
     "youtube": {
       "category": "media",
       "counts": {
         "domains": 20,
-        "ip_entries": 36223,
+        "ip_entries": 36224,
         "ipv4": 18323,
-        "ipv6": 17900
+        "ipv6": 17901
       },
       "dns_unresolved_domains": [
         "ggpht.com",
