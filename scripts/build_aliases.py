@@ -112,8 +112,7 @@ def parse_domains(lines: list[str]) -> list[str]:
 
 
 def resolve_domain(domain: str, timeout: float) -> tuple[str, set[str], str | None]:
-    old_timeout = socket.getdefaulttimeout()
-    socket.setdefaulttimeout(timeout)
+    # getaddrinfo uses the runner resolver; avoid socket.setdefaulttimeout because it is process-global and unsafe across worker threads.
     try:
         answers = set()
         for item in socket.getaddrinfo(domain, None, type=socket.SOCK_STREAM):
@@ -127,8 +126,7 @@ def resolve_domain(domain: str, timeout: float) -> tuple[str, set[str], str | No
         return domain, answers, None if answers else "no global A/AAAA answers"
     except (socket.gaierror, OSError) as exc:
         return domain, set(), str(exc)
-    finally:
-        socket.setdefaulttimeout(old_timeout)
+
 
 
 def sort_ips(values: set[str]) -> list[str]:
