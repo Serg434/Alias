@@ -47,7 +47,7 @@ DOMAIN_SOURCE = (
     "https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Services/youtube.lst"
 )
 DOMAIN_RE = re.compile(
-    r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}$",
+    r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$",
     re.IGNORECASE,
 )
 
@@ -131,7 +131,7 @@ def parse_domains(content: str) -> list[str]:
 def write_atomic(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(content, encoding="utf-8", newline="\\n")
+    temporary.write_text(content, encoding="utf-8", newline="\n")
     temporary.replace(path)
 
 
@@ -182,12 +182,12 @@ def main() -> int:
         }
 
         # Replace published files only after every source and safety check passes.
-        write_atomic(DIST / "youtube_ipv4.txt", "\\n".join(ipv4) + "\\n")
-        write_atomic(DIST / "youtube_ipv6.txt", "\\n".join(ipv6) + "\\n")
-        write_atomic(DIST / "youtube_domains.txt", "\\n".join(domains) + "\\n")
+        write_atomic(DIST / "youtube_ipv4.txt", "\n".join(ipv4) + "\n")
+        write_atomic(DIST / "youtube_ipv6.txt", "\n".join(ipv6) + "\n")
+        write_atomic(DIST / "youtube_domains.txt", "\n".join(domains) + "\n")
         write_atomic(
             DIST / "manifest.json",
-            json.dumps(manifest, indent=2, sort_keys=True) + "\\n",
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n",
         )
 
         print(
