@@ -11,13 +11,13 @@
 - Общий IPv6: https://raw.githubusercontent.com/Serg434/Alias/main/dist/all_ipv6.txt
 - Манифест: https://raw.githubusercontent.com/Serg434/Alias/main/dist/manifest.json
 
-Для каждого сервиса публикуются три файла: `dist/<service>.txt` (IPv4 + IPv6), `dist/<service>_ipv4.txt`, `dist/<service>_ipv6.txt`. Категориальные объединения имеют вид `dist/<category>_all.txt`.
+Для каждого сервиса публикуются ровно три отдельных файла: `dist/ipv4/<service>.txt`, `dist/ipv6/<service>.txt` и `dist/domains/<service>.txt`. Категориальные объединения имеют вид `dist/<category>_all.txt`.
 
 ## Публикуемые домены
 
 Домены не смешиваются с IP feeds. Для них отдельный каталог:
 
-- Все домены: https://raw.githubusercontent.com/Serg434/Alias/main/dist/domains/all_domains.txt
+- Все домены: https://raw.githubusercontent.com/Serg434/Alias/main/dist/all_domains.txt
 - Сервис: https://raw.githubusercontent.com/Serg434/Alias/main/dist/domains/<service>.txt
 
 Доменные списки предназначены для Host(s)/других доменных механизмов OPNsense, а не для URL Table (IPs).
@@ -42,7 +42,7 @@ AI: OpenAI/ChatGPT, Claude, Gemini, Grok, Perplexity, Copilot.
 
 DNS-ответы получены с резолвера GitHub Actions runner. Они зависят от времени, географии, CDN и DNS-резолвера; это не гарантированные постоянные диапазоны сервиса. Для Google и Microsoft не импортируются широкие диапазоны провайдеров: Gemini/Copilot IP-адреса могут пересекаться с обычными Google/Microsoft API. Облачные и CDN-диапазоны целиком не добавляются.
 
-У Meta один общий IP-набор намеренно: разделить эти приложения по IP надёжно нельзя. Домены по каждому сервису перечислены в общем Meta domain feed; отдельные IP-фиды Facebook/Instagram/WhatsApp/Threads будут представлены общим набором Meta, если понадобится отдельное имя алиаса.
+У Meta один общий IP-набор намеренно: разделить эти приложения по IP надёжно нельзя. Поэтому IPv4- и IPv6-фиды Facebook/Instagram/WhatsApp/Threads будут содержать одинаковые общие сети Meta, а доменные фиды останутся раздельными.
 
 ## Валидация
 
