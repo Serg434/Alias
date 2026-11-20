@@ -10,7 +10,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+# Generated feeds are intentionally committed for OPNsense URL Table aliases.
 downloads/
 eggs/
 .eggs/
