@@ -1,0 +1,11 @@
+api2.arduino.cc
+arduino.cc
+arduino.cloud
+arduino.cn
+arduino.com
+create.arduino.cc
+docs.arduino.cc
+downloads.arduino.cc
+forum.arduino.cc
+store.arduino.cc
+support.arduino.cc

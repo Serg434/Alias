@@ -1,35 +1,408 @@
 {
   "counts": {
-    "all_ip_entries": 36212,
-    "domains": 18,
-    "ipv4_entries": 18320,
-    "ipv6_entries": 17892
+    "all_ip_entries": 37851,
+    "domains": 163,
+    "ipv4_entries": 19066,
+    "ipv6_entries": 18785,
+    "services": 20
   },
-  "generated_at": "2026-11-20T12:44:08+00:00",
-  "notes": [
-    "Community-maintained upstream IP feeds; false positives are possible.",
-    "Domain list is published separately and is not converted by resolving apex domains.",
-    "Shared CDN/provider IPs may serve unrelated services."
+  "dns_resolution": {
+    "resolver": "GitHub Actions runner system resolver",
+    "unresolved_domain_count": 32,
+    "warning": "DNS-derived IPs can be GeoDNS/CDN answers and may change. They are not authoritative service-owned prefixes."
+  },
+  "generated_at": "2026-11-20T13:32:36+00:00",
+  "generator": "scripts/build_aliases.py",
+  "global_warnings": [
+    "DNS-resolved addresses may be shared by unrelated services and can vary by resolver, geography and time.",
+    "Meta IP ranges are shared across Facebook, Instagram, WhatsApp and Threads; service isolation is domain-based.",
+    "No broad Google, Microsoft, AWS, Cloudflare or other cloud-provider ranges are imported.",
+    "Domain feeds are separate from URL Table (IPs) feeds and must not be loaded as IP tables."
   ],
-  "rejected_entries": {
-    "ipv4_hosts": 0,
-    "ipv4_networks": 0,
-    "ipv6_hosts": 0,
-    "ipv6_networks": 0
-  },
-  "schema_version": 1,
-  "service": "youtube",
-  "source_counts": {
-    "ipv4_hosts": 17749,
-    "ipv4_networks": 571,
-    "ipv6_hosts": 17131,
-    "ipv6_networks": 761
-  },
-  "sources": {
-    "domains": "https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Services/youtube.lst",
-    "ipv4_hosts": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt",
-    "ipv4_networks": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt",
-    "ipv6_hosts": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt",
-    "ipv6_networks": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr6.txt"
+  "schema_version": 2,
+  "services": {
+    "2ip_weather": {
+      "category": "utilities",
+      "counts": {
+        "domains": 4,
+        "ip_entries": 4,
+        "ipv4": 4,
+        "ipv6": 0
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "arduino": {
+      "category": "development",
+      "counts": {
+        "domains": 11,
+        "ip_entries": 25,
+        "ipv4": 19,
+        "ipv6": 6
+      },
+      "dns_unresolved_domains": [
+        "arduino.cn"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "canva": {
+      "category": "design",
+      "counts": {
+        "domains": 6,
+        "ip_entries": 19,
+        "ipv4": 9,
+        "ipv6": 10
+      },
+      "dns_unresolved_domains": [
+        "canva-apps.com",
+        "canvausercontent.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "claude": {
+      "category": "ai",
+      "counts": {
+        "domains": 6,
+        "ip_entries": 4,
+        "ipv4": 2,
+        "ipv6": 2
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "copilot": {
+      "category": "ai",
+      "counts": {
+        "domains": 2,
+        "ip_entries": 10,
+        "ipv4": 8,
+        "ipv6": 2
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "figma": {
+      "category": "design",
+      "counts": {
+        "domains": 4,
+        "ip_entries": 12,
+        "ipv4": 12,
+        "ipv6": 0
+      },
+      "dns_unresolved_domains": [
+        "figmausercontent.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "gemini": {
+      "category": "ai",
+      "counts": {
+        "domains": 13,
+        "ip_entries": 71,
+        "ipv4": 36,
+        "ipv6": 35
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "grok": {
+      "category": "ai",
+      "counts": {
+        "domains": 8,
+        "ip_entries": 9,
+        "ipv4": 5,
+        "ipv6": 4
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "linkedin": {
+      "category": "social",
+      "counts": {
+        "domains": 3,
+        "ip_entries": 2,
+        "ipv4": 1,
+        "ipv6": 1
+      },
+      "dns_unresolved_domains": [
+        "licdn.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "meta": {
+      "category": "social",
+      "counts": {
+        "domains": 22,
+        "ip_entries": 1375,
+        "ipv4": 589,
+        "ipv6": 786
+      },
+      "dns_unresolved_domains": [
+        "cdninstagram.com",
+        "facebook.net",
+        "tfbnw.net",
+        "whatsapp.biz"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [
+        "Shared Meta network prefixes: cannot reliably isolate Facebook, Instagram, WhatsApp and Threads by IP. This service feed intentionally represents the shared Meta network."
+      ],
+      "rejected_by_source": {
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt": 0,
+        "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt": 0
+      },
+      "sources": [
+        {
+          "accepted": 582,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
+        },
+        {
+          "accepted": 778,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
+        }
+      ]
+    },
+    "netflix": {
+      "category": "media",
+      "counts": {
+        "domains": 8,
+        "ip_entries": 26,
+        "ipv4": 13,
+        "ipv6": 13
+      },
+      "dns_unresolved_domains": [
+        "nflximg.net",
+        "nflxso.net"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "notion": {
+      "category": "productivity",
+      "counts": {
+        "domains": 9,
+        "ip_entries": 26,
+        "ipv4": 12,
+        "ipv6": 14
+      },
+      "dns_unresolved_domains": [
+        "notion-static.com",
+        "notionusercontent.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "openai": {
+      "category": "ai",
+      "counts": {
+        "domains": 9,
+        "ip_entries": 28,
+        "ipv4": 14,
+        "ipv6": 14
+      },
+      "dns_unresolved_domains": [
+        "oaiusercontent.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "perplexity": {
+      "category": "ai",
+      "counts": {
+        "domains": 4,
+        "ip_entries": 5,
+        "ipv4": 3,
+        "ipv6": 2
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "pinterest": {
+      "category": "social",
+      "counts": {
+        "domains": 2,
+        "ip_entries": 4,
+        "ipv4": 4,
+        "ipv6": 0
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "telegram": {
+      "category": "messengers",
+      "counts": {
+        "domains": 8,
+        "ip_entries": 18,
+        "ipv4": 12,
+        "ipv6": 6
+      },
+      "dns_unresolved_domains": [],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {
+        "https://core.telegram.org/resources/cidr.txt": 9
+      },
+      "sources": [
+        {
+          "accepted": 9,
+          "rejected": 5,
+          "url": "https://core.telegram.org/resources/cidr.txt"
+        },
+        {
+          "accepted": 5,
+          "rejected": 9,
+          "url": "https://core.telegram.org/resources/cidr.txt"
+        }
+      ]
+    },
+    "tiktok": {
+      "category": "social",
+      "counts": {
+        "domains": 13,
+        "ip_entries": 14,
+        "ipv4": 14,
+        "ipv6": 0
+      },
+      "dns_unresolved_domains": [
+        "byteoversea.com",
+        "ibytedtos.com",
+        "muscdn.com",
+        "musical.ly",
+        "tiktokcdn-eu.com",
+        "tiktokcdn-us.com",
+        "tiktokcdn.com",
+        "tiktokv.eu",
+        "tiktokv.us",
+        "tiktokw.us",
+        "ttwstatic.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "torrents": {
+      "category": "other",
+      "counts": {
+        "domains": 8,
+        "ip_entries": 19,
+        "ipv4": 11,
+        "ipv6": 8
+      },
+      "dns_unresolved_domains": [
+        "torrentgalaxy.to",
+        "yts.mx"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "wattpad": {
+      "category": "media",
+      "counts": {
+        "domains": 3,
+        "ip_entries": 4,
+        "ipv4": 4,
+        "ipv6": 0
+      },
+      "dns_unresolved_domains": [
+        "wattpad.net",
+        "wattpadstories.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {},
+      "sources": []
+    },
+    "youtube": {
+      "category": "media",
+      "counts": {
+        "domains": 20,
+        "ip_entries": 36223,
+        "ipv4": 18323,
+        "ipv6": 17900
+      },
+      "dns_unresolved_domains": [
+        "ggpht.com",
+        "ytimg.com",
+        "yting.com"
+      ],
+      "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
+      "notes": [],
+      "rejected_by_source": {
+        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt": 0,
+        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr6.txt": 0,
+        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt": 0,
+        "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt": 0
+      },
+      "sources": [
+        {
+          "accepted": 17749,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt"
+        },
+        {
+          "accepted": 571,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt"
+        },
+        {
+          "accepted": 17136,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt"
+        },
+        {
+          "accepted": 762,
+          "rejected": 0,
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr6.txt"
+        },
+        {
+          "type": "domains",
+          "url": "https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Services/youtube.lst"
+        }
+      ]
+    }
   }
 }

@@ -1,0 +1,4 @@
+2ip.io
+api.met.no
+api.open-meteo.com
+wttr.in
