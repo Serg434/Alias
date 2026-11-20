@@ -334,6 +334,110 @@
         "eztv.re",
         "rarbg.to"
       ]
+    },
+    {
+      "id": "facebook",
+      "category": "social",
+      "domains": [
+        "facebook.com",
+        "facebook.net",
+        "fb.com",
+        "fb.me",
+        "fbcdn.net",
+        "fbsbx.com",
+        "messenger.com",
+        "m.me",
+        "fb.watch",
+        "tfbnw.net"
+      ],
+      "ip_sources": [
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt",
+          "family": 4,
+          "kind": "network"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt",
+          "family": 6,
+          "kind": "network"
+        }
+      ],
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ]
+    },
+    {
+      "id": "instagram",
+      "category": "social",
+      "domains": [
+        "instagram.com",
+        "cdninstagram.com",
+        "instagr.am",
+        "ig.me"
+      ],
+      "ip_sources": [
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt",
+          "family": 4,
+          "kind": "network"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt",
+          "family": 6,
+          "kind": "network"
+        }
+      ],
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ]
+    },
+    {
+      "id": "whatsapp",
+      "category": "social",
+      "domains": [
+        "whatsapp.com",
+        "whatsapp.net",
+        "wa.me",
+        "whatsapp.biz"
+      ],
+      "ip_sources": [
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt",
+          "family": 4,
+          "kind": "network"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt",
+          "family": 6,
+          "kind": "network"
+        }
+      ],
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ]
+    },
+    {
+      "id": "threads",
+      "category": "social",
+      "domains": [
+        "threads.net",
+        "threads.com"
+      ],
+      "ip_sources": [
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt",
+          "family": 4,
+          "kind": "network"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt",
+          "family": 6,
+          "kind": "network"
+        }
+      ],
+      "notes": [
+        "Shared Meta network prefixes: this IP feed is the same broad Meta network used by Facebook, Instagram, WhatsApp and Threads; domain separation is provided separately."
+      ]
     }
   ]
 }
