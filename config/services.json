@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "dns_resolution": {
+    "enabled": true,
+    "timeout_seconds": 5,
+    "retries": 2
+  },
+  "services": [
+    {
+      "id": "youtube",
+      "category": "media",
+      "domains": [
+        "youtube.com",
+        "youtube-nocookie.com",
+        "youtu.be",
+        "googlevideo.com",
+        "ytimg.com",
+        "youtubei.googleapis.com",
+        "youtubeembeddedplayer.googleapis.com",
+        "youtube.googleapis.com",
+        "youtubeeducation.com",
+        "yt.be",
+        "ggpht.com"
+      ],
+      "ip_sources": [
+        {
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt",
+          "family": 4,
+          "kind": "address"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt",
+          "family": 4,
+          "kind": "network"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt",
+          "family": 6,
+          "kind": "address"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr6.txt",
+          "family": 6,
+          "kind": "network"
+        }
+      ],
+      "domain_source": "https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Services/youtube.lst"
+    },
+    {
+      "id": "openai",
+      "category": "ai",
+      "domains": [
+        "openai.com",
+        "chatgpt.com",
+        "chat.com",
+        "sora.com",
+        "oaistatic.com",
+        "oaiusercontent.com",
+        "auth.openai.com",
+        "platform.openai.com",
+        "api.openai.com"
+      ]
+    },
+    {
+      "id": "claude",
+      "category": "ai",
+      "domains": [
+        "anthropic.com",
+        "claude.ai",
+        "claude.com",
+        "claudeusercontent.com",
+        "api.anthropic.com",
+        "console.anthropic.com",
+        "claudeusercontent.com"
+      ],
+      "static_ips": [
+        "160.79.104.0/21",
+        "2607:6bc0::/48"
+      ]
+    },
+    {
+      "id": "gemini",
+      "category": "ai",
+      "domains": [
+        "gemini.google.com",
+        "gemini.google",
+        "aistudio.google.com",
+        "ai.google.dev",
+        "generativelanguage.googleapis.com",
+        "alkalimakersuite-pa.clients6.google.com",
+        "alkalicore-pa.clients6.google.com",
+        "proactivebackend-pa.googleapis.com",
+        "notebooklm.google",
+        "notebooklm.google.com",
+        "labs.google",
+        "deepmind.google",
+        "deepmind.com"
+      ]
+    },
+    {
+      "id": "grok",
+      "category": "ai",
+      "domains": [
+        "grok.com",
+        "x.ai",
+        "assets.grok.com",
+        "livekit.grok.com",
+        "api.x.ai",
+        "assets.x.ai",
+        "accounts.x.ai",
+        "auth.x.ai"
+      ]
+    },
+    {
+      "id": "perplexity",
+      "category": "ai",
+      "domains": [
+        "perplexity.ai",
+        "pplx.ai",
+        "www.perplexity.ai",
+        "api.perplexity.ai"
+      ]
+    },
+    {
+      "id": "copilot",
+      "category": "ai",
+      "domains": [
+        "copilot.microsoft.com",
+        "githubcopilot.com"
+      ]
+    },
+    {
+      "id": "canva",
+      "category": "design",
+      "domains": [
+        "canva.com",
+        "canva.cn",
+        "canva.design",
+        "canva-apps.com",
+        "canvausercontent.com",
+        "canva.dev"
+      ]
+    },
+    {
+      "id": "figma",
+      "category": "design",
+      "domains": [
+        "figma.com",
+        "figmausercontent.com",
+        "figma.site",
+        "figma.net"
+      ]
+    },
+    {
+      "id": "notion",
+      "category": "productivity",
+      "domains": [
+        "notion.so",
+        "notion.com",
+        "notion.site",
+        "notion.new",
+        "notion-static.com",
+        "notionusercontent.com",
+        "api.notion.com",
+        "identity.notion.so",
+        "file.notion.so"
+      ]
+    },
+    {
+      "id": "meta",
+      "category": "social",
+      "domains": [
+        "facebook.com",
+        "facebook.net",
+        "fb.com",
+        "fb.me",
+        "fbcdn.net",
+        "fbsbx.com",
+        "messenger.com",
+        "m.me",
+        "instagram.com",
+        "cdninstagram.com",
+        "instagr.am",
+        "ig.me",
+        "threads.net",
+        "threads.com",
+        "whatsapp.com",
+        "whatsapp.net",
+        "wa.me",
+        "meta.com",
+        "meta.ai",
+        "fb.watch",
+        "tfbnw.net",
+        "whatsapp.biz"
+      ],
+      "ip_sources": [
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt",
+          "family": 4,
+          "kind": "network"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt",
+          "family": 6,
+          "kind": "network"
+        }
+      ],
+      "notes": [
+        "Shared Meta network prefixes: cannot reliably isolate Facebook, Instagram, WhatsApp and Threads by IP. This service feed intentionally represents the shared Meta network."
+      ]
+    },
+    {
+      "id": "tiktok",
+      "category": "social",
+      "domains": [
+        "tiktok.com",
+        "tiktokcdn.com",
+        "tiktokv.com",
+        "tiktokcdn-eu.com",
+        "tiktokcdn-us.com",
+        "tiktokv.eu",
+        "tiktokv.us",
+        "tiktokw.us",
+        "ttwstatic.com",
+        "byteoversea.com",
+        "ibytedtos.com",
+        "muscdn.com",
+        "musical.ly"
+      ]
+    },
+    {
+      "id": "pinterest",
+      "category": "social",
+      "domains": [
+        "pinterest.com",
+        "pinimg.com"
+      ]
+    },
+    {
+      "id": "linkedin",
+      "category": "social",
+      "domains": [
+        "linkedin.com",
+        "licdn.com",
+        "lnkd.in"
+      ]
+    },
+    {
+      "id": "telegram",
+      "category": "messengers",
+      "domains": [
+        "telegram.org",
+        "telegram.me",
+        "t.me",
+        "telegram.dog",
+        "telesco.pe",
+        "tg.dev",
+        "tdesktop.com",
+        "telegra.ph"
+      ],
+      "ip_sources": [
+        {
+          "url": "https://core.telegram.org/resources/cidr.txt",
+          "family": 4,
+          "kind": "network"
+        },
+        {
+          "url": "https://core.telegram.org/resources/cidr.txt",
+          "family": 6,
+          "kind": "network"
+        }
+      ]
+    },
+    {
+      "id": "netflix",
+      "category": "media",
+      "domains": [
+        "netflix.com",
+        "netflix.net",
+        "nflxvideo.net",
+        "nflximg.net",
+        "nflximg.com",
+        "nflxext.com",
+        "nflxso.net",
+        "fast.com"
+      ]
+    },
+    {
+      "id": "arduino",
+      "category": "development",
+      "domains": [
+        "arduino.cc",
+        "arduino.com",
+        "arduino.cloud",
+        "arduino.cn",
+        "downloads.arduino.cc",
+        "api2.arduino.cc",
+        "create.arduino.cc",
+        "forum.arduino.cc",
+        "docs.arduino.cc",
+        "support.arduino.cc",
+        "store.arduino.cc"
+      ]
+    },
+    {
+      "id": "2ip_weather",
+      "category": "utilities",
+      "domains": [
+        "2ip.io",
+        "api.open-meteo.com",
+        "wttr.in",
+        "api.met.no"
+      ]
+    },
+    {
+      "id": "wattpad",
+      "category": "media",
+      "domains": [
+        "wattpad.com",
+        "wattpad.net",
+        "wattpadstories.com"
+      ]
+    },
+    {
+      "id": "torrents",
+      "category": "other",
+      "domains": [
+        "thepiratebay.org",
+        "1337x.to",
+        "nyaa.si",
+        "yts.mx",
+        "torrentgalaxy.to",
+        "torrentdownloads.pro",
+        "eztv.re",
+        "rarbg.to"
+      ]
+    }
+  ]
+}
