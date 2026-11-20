@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build deterministic OPNsense URL Table (IPs) feeds for YouTube."""
+"""Build validated OPNsense feeds and a combined all-services IP list."""
 
 from __future__ import annotations
 
@@ -97,7 +97,11 @@ def parse_feed(name: str, content: str, family: int, kind: str):
                 if item.version != family or not item.is_global:
                     rejected += 1
                     continue
-                normalized = item.with_prefixlen
+                normalized = (
+                    item.network_address.compressed
+                    if item.prefixlen == item.max_prefixlen
+                    else item.with_prefixlen
+                )
             accepted.add(normalized)
         except ValueError:
             rejected += 1
@@ -148,8 +152,16 @@ def main() -> int:
             rejected_by_source[name] = rejected
             source_counts[name] = len(entries)
 
-        ipv4 = sorted(parsed["ipv4_hosts"] | parsed["ipv4_networks"])
-        ipv6 = sorted(parsed["ipv6_hosts"] | parsed["ipv6_networks"])
+        ipv4_set = parsed["ipv4_hosts"] | parsed["ipv4_networks"]
+        ipv6_set = parsed["ipv6_hosts"] | parsed["ipv6_networks"]
+
+        def ip_sort_key(value: str):
+            network = ipaddress.ip_network(value, strict=False)
+            return (network.version, int(network.network_address), network.prefixlen)
+
+        ipv4 = sorted(ipv4_set, key=ip_sort_key)
+        ipv6 = sorted(ipv6_set, key=ip_sort_key)
+        all_ips = sorted(ipv4_set | ipv6_set, key=ip_sort_key)
 
         if len(ipv4) < MIN_IPV4_ENTRIES:
             raise BuildError(f"IPv4 output below safety threshold: {len(ipv4)}")
@@ -167,6 +179,7 @@ def main() -> int:
                 "ipv4_entries": len(ipv4),
                 "ipv6_entries": len(ipv6),
                 "domains": len(domains),
+                "all_ip_entries": len(all_ips),
             },
             "source_counts": source_counts,
             "rejected_entries": rejected_by_source,
@@ -182,6 +195,7 @@ def main() -> int:
         }
 
         # Replace published files only after every source and safety check passes.
+        write_atomic(DIST / "all_ips.txt", "\n".join(all_ips) + "\n")
         write_atomic(DIST / "youtube_ipv4.txt", "\n".join(ipv4) + "\n")
         write_atomic(DIST / "youtube_ipv6.txt", "\n".join(ipv6) + "\n")
         write_atomic(DIST / "youtube_domains.txt", "\n".join(domains) + "\n")
@@ -192,7 +206,7 @@ def main() -> int:
 
         print(
             f"Build OK: IPv4={len(ipv4)}, IPv6={len(ipv6)}, "
-            f"domains={len(domains)}"
+            f"domains={len(domains)}, all IPs={len(all_ips)}"
         )
         print(
             "Rejected entries by source: "
