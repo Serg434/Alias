@@ -1,0 +1,35 @@
+{
+  "counts": {
+    "all_ip_entries": 36212,
+    "domains": 18,
+    "ipv4_entries": 18320,
+    "ipv6_entries": 17892
+  },
+  "generated_at": "2026-11-20T12:44:08+00:00",
+  "notes": [
+    "Community-maintained upstream IP feeds; false positives are possible.",
+    "Domain list is published separately and is not converted by resolving apex domains.",
+    "Shared CDN/provider IPs may serve unrelated services."
+  ],
+  "rejected_entries": {
+    "ipv4_hosts": 0,
+    "ipv4_networks": 0,
+    "ipv6_hosts": 0,
+    "ipv6_networks": 0
+  },
+  "schema_version": 1,
+  "service": "youtube",
+  "source_counts": {
+    "ipv4_hosts": 17749,
+    "ipv4_networks": 571,
+    "ipv6_hosts": 17131,
+    "ipv6_networks": 761
+  },
+  "sources": {
+    "domains": "https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Services/youtube.lst",
+    "ipv4_hosts": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt",
+    "ipv4_networks": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt",
+    "ipv6_hosts": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt",
+    "ipv6_networks": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr6.txt"
+  }
+}
