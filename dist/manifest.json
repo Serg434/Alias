@@ -1,9 +1,9 @@
 {
   "counts": {
-    "all_ip_entries": 37874,
+    "all_ip_entries": 37878,
     "domains": 163,
-    "ipv4_entries": 19076,
-    "ipv6_entries": 18798,
+    "ipv4_entries": 19077,
+    "ipv6_entries": 18801,
     "services": 24
   },
   "dns_resolution": {
@@ -11,7 +11,7 @@
     "unresolved_domain_count": 36,
     "warning": "DNS-derived IPs can be GeoDNS/CDN answers and may change. They are not authoritative service-owned prefixes."
   },
-  "generated_at": "2026-11-21T11:17:23+00:00",
+  "generated_at": "2026-11-22T11:36:58+00:00",
   "generator": "scripts/build_aliases.py",
   "global_warnings": [
     "DNS-resolved addresses may be shared by unrelated services and can vary by resolver, geography and time.",
@@ -100,9 +100,9 @@
       "category": "social",
       "counts": {
         "domains": 10,
-        "ip_entries": 1366,
-        "ipv4": 585,
-        "ipv6": 781
+        "ip_entries": 1364,
+        "ipv4": 584,
+        "ipv6": 780
       },
       "dns_unresolved_domains": [
         "facebook.net",
@@ -149,9 +149,9 @@
       "category": "ai",
       "counts": {
         "domains": 13,
-        "ip_entries": 70,
-        "ipv4": 35,
-        "ipv6": 35
+        "ip_entries": 68,
+        "ipv4": 34,
+        "ipv6": 34
       },
       "dns_unresolved_domains": [],
       "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
@@ -177,9 +177,9 @@
       "category": "social",
       "counts": {
         "domains": 4,
-        "ip_entries": 1366,
+        "ip_entries": 1365,
         "ipv4": 585,
-        "ipv6": 781
+        "ipv6": 780
       },
       "dns_unresolved_domains": [
         "cdninstagram.com"
@@ -225,9 +225,9 @@
       "category": "social",
       "counts": {
         "domains": 22,
-        "ip_entries": 1378,
-        "ipv4": 590,
-        "ipv6": 788
+        "ip_entries": 1373,
+        "ipv4": 589,
+        "ipv6": 784
       },
       "dns_unresolved_domains": [
         "cdninstagram.com",
@@ -365,9 +365,9 @@
       "category": "social",
       "counts": {
         "domains": 2,
-        "ip_entries": 1363,
+        "ip_entries": 1362,
         "ipv4": 583,
-        "ipv6": 780
+        "ipv6": 779
       },
       "dns_unresolved_domains": [],
       "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
@@ -455,9 +455,9 @@
       "category": "social",
       "counts": {
         "domains": 4,
-        "ip_entries": 1363,
+        "ip_entries": 1362,
         "ipv4": 583,
-        "ipv6": 780
+        "ipv6": 779
       },
       "dns_unresolved_domains": [
         "whatsapp.biz"
@@ -487,9 +487,9 @@
       "category": "media",
       "counts": {
         "domains": 20,
-        "ip_entries": 36243,
-        "ipv4": 18333,
-        "ipv6": 17910
+        "ip_entries": 36252,
+        "ipv4": 18335,
+        "ipv6": 17917
       },
       "dns_unresolved_domains": [
         "ggpht.com",
@@ -506,7 +506,7 @@
       },
       "sources": [
         {
-          "accepted": 17759,
+          "accepted": 17761,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt"
         },
@@ -516,7 +516,7 @@
           "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt"
         },
         {
-          "accepted": 17145,
+          "accepted": 17152,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt"
         },
