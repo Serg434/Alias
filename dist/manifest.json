@@ -1,9 +1,9 @@
 {
   "counts": {
-    "all_ip_entries": 37911,
+    "all_ip_entries": 37912,
     "domains": 163,
-    "ipv4_entries": 19093,
-    "ipv6_entries": 18818,
+    "ipv4_entries": 19095,
+    "ipv6_entries": 18817,
     "services": 24
   },
   "dns_resolution": {
@@ -11,7 +11,7 @@
     "unresolved_domain_count": 36,
     "warning": "DNS-derived IPs can be GeoDNS/CDN answers and may change. They are not authoritative service-owned prefixes."
   },
-  "generated_at": "2026-11-23T13:02:55+00:00",
+  "generated_at": "2026-11-24T13:52:33+00:00",
   "generator": "scripts/build_aliases.py",
   "global_warnings": [
     "DNS-resolved addresses may be shared by unrelated services and can vary by resolver, geography and time.",
@@ -100,9 +100,9 @@
       "category": "social",
       "counts": {
         "domains": 10,
-        "ip_entries": 1371,
+        "ip_entries": 1372,
         "ipv4": 587,
-        "ipv6": 784
+        "ipv6": 785
       },
       "dns_unresolved_domains": [
         "facebook.net",
@@ -118,12 +118,12 @@
       },
       "sources": [
         {
-          "accepted": 582,
+          "accepted": 583,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
         },
         {
-          "accepted": 778,
+          "accepted": 779,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
         }
@@ -177,8 +177,8 @@
       "category": "social",
       "counts": {
         "domains": 4,
-        "ip_entries": 1365,
-        "ipv4": 584,
+        "ip_entries": 1366,
+        "ipv4": 585,
         "ipv6": 781
       },
       "dns_unresolved_domains": [
@@ -194,12 +194,12 @@
       },
       "sources": [
         {
-          "accepted": 582,
+          "accepted": 583,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
         },
         {
-          "accepted": 778,
+          "accepted": 779,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
         }
@@ -226,8 +226,8 @@
       "counts": {
         "domains": 22,
         "ip_entries": 1385,
-        "ipv4": 593,
-        "ipv6": 792
+        "ipv4": 594,
+        "ipv6": 791
       },
       "dns_unresolved_domains": [
         "cdninstagram.com",
@@ -245,12 +245,12 @@
       },
       "sources": [
         {
-          "accepted": 582,
+          "accepted": 583,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
         },
         {
-          "accepted": 778,
+          "accepted": 779,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
         }
@@ -365,9 +365,9 @@
       "category": "social",
       "counts": {
         "domains": 2,
-        "ip_entries": 1364,
-        "ipv4": 584,
-        "ipv6": 780
+        "ip_entries": 1366,
+        "ipv4": 585,
+        "ipv6": 781
       },
       "dns_unresolved_domains": [],
       "ip_resolution": "configured upstream/static prefixes plus GitHub Actions runner DNS A/AAAA answers; DNS results are resolver- and time-dependent",
@@ -380,12 +380,12 @@
       },
       "sources": [
         {
-          "accepted": 582,
+          "accepted": 583,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
         },
         {
-          "accepted": 778,
+          "accepted": 779,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
         }
@@ -472,12 +472,12 @@
       },
       "sources": [
         {
-          "accepted": 582,
+          "accepted": 583,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv4.txt"
         },
         {
-          "accepted": 778,
+          "accepted": 779,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/lord-alfred/ipranges/main/facebook/ipv6.txt"
         }
@@ -487,9 +487,9 @@
       "category": "media",
       "counts": {
         "domains": 20,
-        "ip_entries": 36268,
-        "ipv4": 18342,
-        "ipv6": 17926
+        "ip_entries": 36270,
+        "ipv4": 18343,
+        "ipv6": 17927
       },
       "dns_unresolved_domains": [
         "ggpht.com",
@@ -506,7 +506,7 @@
       },
       "sources": [
         {
-          "accepted": 17768,
+          "accepted": 17769,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv4.txt"
         },
@@ -516,7 +516,7 @@
           "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/cidr4.txt"
         },
         {
-          "accepted": 17161,
+          "accepted": 17162,
           "rejected": 0,
           "url": "https://raw.githubusercontent.com/touhidurrr/iplist-youtube/main/lists/ipv6.txt"
         },
